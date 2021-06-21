@@ -97,8 +97,8 @@ refs.lightboxRef.addEventListener('click', e => {
 window.addEventListener('keydown', e => {
   if (!refs.lightboxRef.classList.contains('is-open')) return;
   if (e.code === 'Escape') onCloseLigthbox(e);
-  if (e.code === 'ArrowLeft') onScrollingGallery(e, -1); //листаем налево
-  if (e.code === 'ArrowRight') onScrollingGallery(e, 1); //листаем направо
+  if (e.code === 'ArrowLeft') onScrollingGallery(indexActiveImg, -1); //листаем налево
+  if (e.code === 'ArrowRight') onScrollingGallery(indexActiveImg, 1); //листаем направо
 });
 
 //открытие модального окна
@@ -122,11 +122,23 @@ function onCloseLigthbox(e) {
   updateAttributeLightbox();
 }
 
-function onScrollingGallery(e, direction) {
-  console.log(direction);
+//скролинг галереи
+function onScrollingGallery(activeId, direction) {
+  indexActiveImg = activeId + direction;
+
+  if (indexActiveImg < 0) {
+    indexActiveImg = galleryItems.length - 1;
+  }
+
+  if (indexActiveImg === galleryItems.length) {
+    indexActiveImg = 0;
+  }
+  const nextSrcOriginalImg = galleryItems[indexActiveImg].original;
+  const nextAltOriginalImg = galleryItems[indexActiveImg].description;
+
+  updateAttributeLightbox(nextSrcOriginalImg, nextAltOriginalImg);
 }
 
-//подмена для элемента img.lightbox__image
 function updateAttributeLightbox(src = '', alt = '') {
   refs.imgLightboxRef.src = src;
   refs.imgLightboxRef.alt = alt;
